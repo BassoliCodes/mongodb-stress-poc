@@ -10,7 +10,7 @@ class UserController {
         if (!name || !email) {
             return response.status(400).json({
                 status: 400,
-                message: "Você precisa informar todos os campos.",
+                message: "You not provided a name and email.",
             });
         }
 
