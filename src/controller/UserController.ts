@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
 
-const prismaCLient = new PrismaClient();
+const prismaClient = new PrismaClient();
 
 class UserController {
     public store = async (request: Request, response: Response) => {
@@ -14,7 +14,18 @@ class UserController {
             });
         }
 
-        const user = await prismaCLient.user.create({
+        const userAlreadyExists = await prismaClient.user.findFirst({
+            where: { email },
+        });
+
+        if (userAlreadyExists) {
+            return response.status(400).json({
+                status: 400,
+                message: "Email provided is already in use.",
+            });
+        }
+
+        const user = await prismaClient.user.create({
             data: {
                 name,
                 email,
